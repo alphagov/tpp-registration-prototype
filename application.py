@@ -432,7 +432,7 @@ def onboardapp_handler() -> Response:
 
         try:
             r = requests.post(
-                os.path.join(DIRECTORY_ENDPOINT, 'onboard'),
+                request.form.get('authorization_server'),
                 headers=headers,
                 data=make_onboarding_token(
                     kid=cache.get('kid'),
