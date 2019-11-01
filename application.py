@@ -30,10 +30,12 @@ from werkzeug.contrib.cache import SimpleCache
 
 # ENV vars
 FLASK_DEBUG = os.getenv('FLASK_DEBUG', True)
-TEMPLATES_FOLDER = os.getenv('TEMPLATES_FOLDER')
-CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT'))
+TEMPLATES_FOLDER = os.getenv('TEMPLATES_FOLDER', './templates')
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', 360000))
 
 TEST_API_ENDPOINT = os.getenv('TEST_API_ENDPOINT')
+
+DIRECTORY_ENDPOINT = os.getenv('DIRECTORY_ENDPOINT', 'http://localhost:3000')
 
 if FLASK_DEBUG:
     # configure requests logging
@@ -186,9 +188,9 @@ def get_context() -> dict:
     context['software_statement_id'] = cache.get('software_statement_id')
     context['client_scopes'] = cache.get('client_scopes')
     context['onboarding_scopes'] = cache.get('onboarding_scopes')
-    context['token_url'] = cache.get('token_url')
-    context['tpp_ssa_url'] = cache.get('tpp_ssa_url')
-    context['aspsp_list_url'] = cache.get('aspsp_list_url')
+    context['token_url'] = os.path.join(DIRECTORY_ENDPOINT, 'token')
+    context['tpp_ssa_url'] = os.path.join(DIRECTORY_ENDPOINT, 'generate')
+    context['aspsp_list_url'] = os.path.join(DIRECTORY_ENDPOINT, 'authorization_servers')
 
     # Private key settings
     context['key_size'] = cache.get('key_size')
@@ -245,7 +247,7 @@ def root_handler() -> Response:
         cache.set('aspsp_list_url', request.form.get('aspsp_list_url'), timeout=CACHE_TIMEOUT)
 
         cache.set('private_key_pem', '', timeout=CACHE_TIMEOUT)
-        cache.set('kid', '', timeout=CACHE_TIMEOUT)
+        cache.set('kid', secrets.token_hex(16), timeout=CACHE_TIMEOUT)
         cache.set('csr_pem', '', timeout=CACHE_TIMEOUT)
 
     context = dict(settings=get_context())
@@ -276,6 +278,14 @@ def createacsr_handler() -> Response:
         csr = make_csr(private_key)
         csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode(encoding='utf-8')
         cache.set('csr_pem', csr_pem, timeout=CACHE_TIMEOUT)
+
+        requests.post(
+            os.path.join(DIRECTORY_ENDPOINT, 'client_csr'),
+            data=dict(
+                client_id=cache.get('software_statement_id'),
+                csr_pem=cache.get('csr_pem')
+            )
+        )
 
     context = dict(settings=get_context())
 
@@ -422,7 +432,7 @@ def onboardapp_handler() -> Response:
 
         try:
             r = requests.post(
-                request.form.get('authorization_server'),
+                os.path.join(DIRECTORY_ENDPOINT, 'onboard'),
                 headers=headers,
                 data=make_onboarding_token(
                     kid=cache.get('kid'),

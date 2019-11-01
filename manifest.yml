@@ -1,0 +1,4 @@
+---
+applications:
+- name: onboarding-prototype
+  buildpack: python_buildpack
