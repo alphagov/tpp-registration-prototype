@@ -282,7 +282,7 @@ def createacsr_handler() -> Response:
         requests.post(
             os.path.join(DIRECTORY_ENDPOINT, 'client_csr'),
             data=dict(
-                client_id=cache.get('software_statement_id'),
+                client_id=cache.get('tpp_id'),
                 csr_pem=cache.get('csr_pem')
             )
         )
