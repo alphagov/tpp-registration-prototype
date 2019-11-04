@@ -31,7 +31,7 @@ from werkzeug.contrib.cache import SimpleCache
 # ENV vars
 FLASK_DEBUG = os.getenv('FLASK_DEBUG', True)
 TEMPLATES_FOLDER = os.getenv('TEMPLATES_FOLDER', './templates')
-CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', 360000))
+CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', 300))
 
 TEST_API_ENDPOINT = os.getenv('TEST_API_ENDPOINT')
 
