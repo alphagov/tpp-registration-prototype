@@ -206,6 +206,7 @@ def get_context() -> dict:
     context['private_key_pem'] = cache.get('private_key_pem')
     context['kid'] = make_jwk_from_pem(context['private_key_pem']).get('kid')
     context['csr_pem'] = cache.get('csr_pem')
+    context['certificate'] = cache.get('certificate')
 
     # Access token
     context['access_token'] = cache.get('access_token')
@@ -280,12 +281,19 @@ def createacsr_handler() -> Response:
         cache.set('csr_pem', csr_pem, timeout=CACHE_TIMEOUT)
 
         requests.post(
-            os.path.join(DIRECTORY_ENDPOINT, 'client_csr'),
+            os.path.join(DIRECTORY_ENDPOINT, 'client-csr'),
             data=dict(
                 client_id=cache.get('tpp_id'),
                 csr_pem=cache.get('csr_pem')
             )
         )
+
+        r = requests.get(os.path.join(DIRECTORY_ENDPOINT, 'certificate', cache.get('tpp_id')))
+
+        if r.status_code == 200:
+            cache.set('certificate', r.json().get('certificate'), timeout=CACHE_TIMEOUT)
+        else:
+            cache.set('certificate', '', timeout=CACHE_TIMEOUT)
 
     context = dict(settings=get_context())
 

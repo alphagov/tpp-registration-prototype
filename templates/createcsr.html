@@ -114,6 +114,7 @@
                     </div>
 
                     <div class="hr-line-dashed"></div>
+
                     <div id="privatekey">
                         {% if context.settings.private_key_pem %}
                             <p>
@@ -123,6 +124,11 @@
                         {% if context.settings.csr_pem %}
                             <p>
                             <pre>{{ context.settings.csr_pem }}</pre>
+                            </p>
+                        {% endif %}
+                        {% if context.settings.certificate %}
+                            <p>
+                            <pre>{{ context.settings.certificate }}</pre>
                             </p>
                         {% endif %}
                     </div>
