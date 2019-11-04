@@ -318,7 +318,7 @@ def createatoken_handler() -> Response:
             data_dict = dict(
                 client_assertion_type='urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                 grant_type='client_credentials',
-                client_id=cache.get('software_statement_id'),
+                client_id=cache.get('tpp_id'),
                 client_assertion=cache.get('signed_token'),
                 scope=cache.get('client_scopes')
             )
