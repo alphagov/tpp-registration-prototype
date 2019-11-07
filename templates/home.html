@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block home %}
     <div class="jumbotron">
-        <h1>TPP Onboarding Application</h1>
-        <p>The TPP Onboarding Application is meant to help onboard TPP apps with ASPSPs.</p>
+        <h1>Organisation Onboarding Application</h1>
+        <p>The Organisation Onboarding Application is meant to help onboard organisation apps to the Trust Framework.</p>
+        <p>An organisation can be a Service or a Broker.</p>
     </div>
     <!-- -->
     <div class="col-lg-12">
@@ -19,7 +20,7 @@
 
                     <div class="form-group">
                         <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>TPP ID</strong></span><br/>
+                                class="help-block m-b-none"><strong>Organisation ID</strong></span><br/>
                             <input type="text" name="tpp_id" for="tpp_id" id="tpp_id"
                                    placeholder="e.g. COOLTPP01"
                                    {% if context.settings.tpp_id %}value="{{ context.settings.tpp_id }}"{% endif %}
@@ -40,7 +41,7 @@
 
                     <div class="form-group">
                         <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Client Scopes</strong></span><br/>
+                                class="help-block m-b-none"><strong>Organisation Scopes</strong></span><br/>
                             <input type="text" name="client_scopes" for="client_scopes" id="client_scopes"
                                    placeholder="e.g. ASPSPReadAccess TPPReadAccess"
                                    {% if context.settings.client_scopes %}value="{{ context.settings.client_scopes }}"{% endif %}
@@ -70,7 +71,7 @@
 
                     <div class="form-group">
                         <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>ASPSP List URL</strong></span><br/>
+                                class="help-block m-b-none"><strong>Authorisation Servers URL</strong></span><br/>
                             <input type="text" name="aspsp_list_url" for="aspsp_list_url" id="aspsp_list_url"
                                    placeholder="e.g. https://www.example.com/aspsp"
                                    {% if context.settings.aspsp_list_url %}value="{{ context.settings.aspsp_list_url }}"{% endif %}

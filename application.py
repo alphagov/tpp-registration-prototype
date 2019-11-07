@@ -190,7 +190,7 @@ def get_context() -> dict:
     context['onboarding_scopes'] = cache.get('onboarding_scopes')
     context['token_url'] = os.path.join(DIRECTORY_ENDPOINT, 'token')
     context['tpp_ssa_url'] = os.path.join(DIRECTORY_ENDPOINT, 'generate')
-    context['aspsp_list_url'] = os.path.join(DIRECTORY_ENDPOINT, 'authorization_servers')
+    context['aspsp_list_url'] = os.path.join(DIRECTORY_ENDPOINT, 'authorization-servers')
 
     # Private key settings
     context['key_size'] = cache.get('key_size')
@@ -354,7 +354,7 @@ def getssa_handler() -> Response:
 
         try:
             r = requests.get(
-                '{}/tpp/{}/ssa/{}'.format(
+                '{}/organisation/{}/ssa/{}'.format(
                     cache.get('tpp_ssa_url'),
                     cache.get('tpp_id'),
                     cache.get('software_statement_id')

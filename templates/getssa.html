@@ -2,7 +2,7 @@
 {% block getssa %}
     <div class="jumbotron">
         <h1>Retrieve Software Statement Assertion (SSA)</h1>
-        <p>You need an SSA to onboard your application with the ASPSPs.</p>
+        <p>You need a SSA to onboard your application with a Broker or IDP.</p>
         </p>
     </div>
     <!-- -->
@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>TPP ID</strong></span><br/>
+                                class="help-block m-b-none"><strong>Organisation ID</strong></span><br/>
                             {% if context.settings.tpp_id %}
                                 <input disabled type="text" name="tpp_id" for="tpp_id" id="tpp_id"
                                        placeholder="e.g. COOLTPP01"
@@ -30,7 +30,7 @@
                                        >
                             {% else %}
                                 <div class="alert alert-danger">
-                                    <div class="well well-sm">You must set a TPP ID otherwise you will not be able to
+                                    <div class="well well-sm">You must set an Organisation ID otherwise you will not be able to
                                         create a
                                         valid CSR.
                                         Click <a href="/"> here</a> to go back and set it.

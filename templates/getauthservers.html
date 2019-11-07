@@ -2,7 +2,7 @@
 {% block getauthservers %}
     <div class="jumbotron">
         <h1>Retrieve Authorization Servers</h1>
-        <p>You need that list to onboard your application with the ASPSPs.</p>
+        <p>You need that list to onboard your application with a Broker or IDP.</p>
         </p>
     </div>
     <!-- -->
@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>ASPSP List URL</strong></span><br/>
+                                class="help-block m-b-none"><strong>Authorisation Servers List URL</strong></span><br/>
                             <input disabled type="text" name="aspsp_list_url" for="aspsp_list_url" id="aspsp_list_url"
                                    placeholder="e.g. https://www.example.com/aspsp"
                                    {% if context.settings.aspsp_list_url %}value="{{ context.settings.aspsp_list_url }}"{% endif %}

@@ -1,5 +1,5 @@
 #
-# TPP Onboarding Application Dockerfile
+# Organisation Onboarding Application Dockerfile
 # Running Python 3.6.x
 FROM python:3.6
 MAINTAINER Glyn Jackson (glyn.jackson@openbanking.org)
