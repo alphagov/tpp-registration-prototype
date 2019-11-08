@@ -20,6 +20,16 @@
 
                     <div class="form-group">
                         <div class="col-lg-10"><br/><span
+                                class="help-block m-b-none"><strong>Organisation Name</strong></span><br/>
+                            <input type="text" name="org_name" for="org_name" id="org_name"
+                                   placeholder="e.g. Super Cool Org"
+                                   {% if context.settings.org_name %}value="{{ context.settings.org_name }}"{% endif %}
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10"><br/><span
                                 class="help-block m-b-none"><strong>Organisation ID</strong></span><br/>
                             <input type="text" name="tpp_id" for="tpp_id" id="tpp_id"
                                    placeholder="e.g. COOLTPP01"

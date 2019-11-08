@@ -184,6 +184,7 @@ def get_context() -> dict:
     context = dict()
 
     # Home /
+    context['org_name'] = cache.get('org_name')
     context['tpp_id'] = cache.get('tpp_id')
     context['software_statement_id'] = cache.get('software_statement_id')
     context['client_scopes'] = cache.get('client_scopes')
@@ -239,7 +240,9 @@ def root_handler() -> Response:
 
     if request.method == 'POST':
 
+        cache.set('org_name', request.form.get('org_name'), timeout=CACHE_TIMEOUT)
         cache.set('tpp_id', request.form.get('tpp_id'), timeout=CACHE_TIMEOUT)
+        cache.set('type', 'service') # client, service, OP, bank, IDP etc
         cache.set('software_statement_id', request.form.get('software_statement_id'), timeout=CACHE_TIMEOUT)
         cache.set('client_scopes', request.form.get('client_scopes'), timeout=CACHE_TIMEOUT)
         cache.set('onboarding_scopes', request.form.get('onboarding_scopes'), timeout=CACHE_TIMEOUT)
@@ -250,6 +253,15 @@ def root_handler() -> Response:
         cache.set('private_key_pem', '', timeout=CACHE_TIMEOUT)
         cache.set('kid', secrets.token_hex(16), timeout=CACHE_TIMEOUT)
         cache.set('csr_pem', '', timeout=CACHE_TIMEOUT)
+
+        requests.post(
+            os.path.join(DIRECTORY_ENDPOINT, 'organisation', cache.get('type')),
+            data=dict(
+                organisation_name=cache.get('org_name'),
+                client_id=cache.get('tpp_id'),
+                csr_pem=cache.get('csr_pem')
+            )
+        )
 
     context = dict(settings=get_context())
 
@@ -284,11 +296,12 @@ def createacsr_handler() -> Response:
             os.path.join(DIRECTORY_ENDPOINT, 'client-csr'),
             data=dict(
                 client_id=cache.get('tpp_id'),
+                ssa_id=cache.get('software_statement_id'),
                 csr_pem=cache.get('csr_pem')
             )
         )
 
-        r = requests.get(os.path.join(DIRECTORY_ENDPOINT, 'certificate', cache.get('tpp_id')))
+        r = requests.get(os.path.join(DIRECTORY_ENDPOINT, 'certificate/transport', cache.get('tpp_id')))
 
         if r.status_code == 200:
             cache.set('certificate', r.json().get('certificate'), timeout=CACHE_TIMEOUT)
@@ -354,16 +367,19 @@ def getssa_handler() -> Response:
 
         try:
             r = requests.get(
-                '{}/organisation/{}/ssa/{}'.format(
-                    cache.get('tpp_ssa_url'),
+                os.path.join(
+                    DIRECTORY_ENDPOINT,
+                    'organisation',
+                    cache.get('type'),
                     cache.get('tpp_id'),
-                    cache.get('software_statement_id')
+                    'software-statement'
                 ),
                 headers=dict(
                     Authorization='Bearer {}'.format(
                         cache.get('access_token')
                     )
-                )
+                ),
+                data=dict(ssa_id=cache.get('software_statement_id'))
             )
 
         except Exception as e:
