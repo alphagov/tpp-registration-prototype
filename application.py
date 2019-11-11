@@ -186,6 +186,8 @@ def get_context() -> dict:
     # Home /
     context['org_name'] = cache.get('org_name')
     context['tpp_id'] = cache.get('tpp_id')
+    context['type'] = cache.get('type')
+    context['domain'] = cache.get('domain')
     context['software_statement_id'] = cache.get('software_statement_id')
     context['client_scopes'] = cache.get('client_scopes')
     context['onboarding_scopes'] = cache.get('onboarding_scopes')
@@ -242,7 +244,9 @@ def root_handler() -> Response:
 
         cache.set('org_name', request.form.get('org_name'), timeout=CACHE_TIMEOUT)
         cache.set('tpp_id', request.form.get('tpp_id'), timeout=CACHE_TIMEOUT)
-        cache.set('type', 'service') # client, service, OP, bank, IDP etc
+        cache.set('type', request.form.get('type'), timeout=CACHE_TIMEOUT) # Broker, IDP etc
+        cache.set('domain', request.form.get('domain'), timeout=CACHE_TIMEOUT) # Broker, IDP etc
+        cache.set('loa', request.form.get('loa'), timeout=CACHE_TIMEOUT)
         cache.set('software_statement_id', request.form.get('software_statement_id'), timeout=CACHE_TIMEOUT)
         cache.set('client_scopes', request.form.get('client_scopes'), timeout=CACHE_TIMEOUT)
         cache.set('onboarding_scopes', request.form.get('onboarding_scopes'), timeout=CACHE_TIMEOUT)
@@ -259,7 +263,9 @@ def root_handler() -> Response:
             data=dict(
                 organisation_name=cache.get('org_name'),
                 client_id=cache.get('tpp_id'),
-                csr_pem=cache.get('csr_pem')
+                domain=cache.get('domain'),
+                csr_pem=cache.get('csr_pem'),
+                loa=cache.get('loa') if cache.get('type') == 'idp' else None
             )
         )
 
