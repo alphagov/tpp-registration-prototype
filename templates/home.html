@@ -3,7 +3,7 @@
     <div class="jumbotron">
         <h1>Organisation Onboarding Application</h1>
         <p>The Organisation Onboarding Application is meant to help onboard organisation apps to the Trust Framework.</p>
-        <p>An organisation can be a Service or a Broker.</p>
+        <p>An organisation can be a Broker or an IDP.</p>
     </div>
     <!-- -->
     <div class="col-lg-12">
@@ -35,6 +35,40 @@
                                    placeholder="e.g. COOLTPP01"
                                    {% if context.settings.tpp_id %}value="{{ context.settings.tpp_id }}"{% endif %}
                                    class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10"><br/><span
+                                class="help-block m-b-none"><strong>Organisation Domain</strong></span><br/>
+                            <input type="text" name="domain" for="domain" id="domain"
+                                   placeholder="e.g. https://www.example.com"
+                                   {% if context.settings.domain %}value="{{ context.settings.domain }}"{% endif %}
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10"><br/><span
+                            class="help-block m-b-none"><strong>Organisation Type</strong></span><br/>
+                                <select name="type">
+                                    <option value="broker">Broker</option>
+                                    <option value="idp">IDP</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10"><br/><span
+                            class="help-block m-b-none"><strong>Level of Assurance</strong></span>
+                            <span class="help-block m-b-none">
+                                Only applicable for IDP organisation type
+                            </span><br/>
+                            <select name="loa">
+                                <option value="1">LOA 1</option>
+                                <option value="2">LOA 2</option>
+                                <option value="3">LOA 3</option>
+                            </select>
                         </div>
                     </div>
 
