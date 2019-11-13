@@ -126,9 +126,14 @@
                             <pre>{{ context.settings.csr_pem }}</pre>
                             </p>
                         {% endif %}
-                        {% if context.settings.certificate %}
+                        {% if context.settings.transport_certificate %}
                             <p>
-                            <pre>{{ context.settings.certificate }}</pre>
+                            <pre>{{ context.settings.transport_certificate }}</pre>
+                            </p>
+                        {% endif %}
+                        {% if context.settings.transport_private_key %}
+                            <p>
+                            <pre>{{ context.settings.transport_private_key }}</pre>
                             </p>
                         {% endif %}
                     </div>
