@@ -52,8 +52,14 @@
                         <div class="col-lg-10"><br/><span
                             class="help-block m-b-none"><strong>Organisation Type</strong></span><br/>
                                 <select name="type">
-                                    <option value="broker">Broker</option>
-                                    <option value="idp">IDP</option>
+                                    <option value="broker"
+                                        {% if context.settings.type == 'broker' %} selected {% endif %}>
+                                        Broker
+                                    </option>
+                                    <option value="idp"
+                                        {% if context.settings.type == 'idp' %} selected {% endif %}>
+                                        IDP
+                                    </option>
                                 </select>
                         </div>
                     </div>

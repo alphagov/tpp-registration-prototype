@@ -246,7 +246,7 @@ def root_handler() -> Response:
         cache.set('org_name', request.form.get('org_name'), timeout=CACHE_TIMEOUT)
         cache.set('tpp_id', request.form.get('tpp_id'), timeout=CACHE_TIMEOUT)
         cache.set('type', request.form.get('type'), timeout=CACHE_TIMEOUT) # Broker, IDP etc
-        cache.set('domain', request.form.get('domain'), timeout=CACHE_TIMEOUT) # Broker, IDP etc
+        cache.set('domain', request.form.get('domain'), timeout=CACHE_TIMEOUT)
         cache.set('loa', request.form.get('loa'), timeout=CACHE_TIMEOUT)
         cache.set('software_statement_id', request.form.get('software_statement_id'), timeout=CACHE_TIMEOUT)
         cache.set('client_scopes', request.form.get('client_scopes'), timeout=CACHE_TIMEOUT)
