@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block createcsr %}
     <div class="jumbotron">
-        <h1>Create a CSR</h1>
-        <p>You need to create and submit a CSR in order to create a transport/signing certificate.</p>
+        <h1>Create signing and transport CSRs</h1>
+        <p>You need to create and submit signing and transport CSRs.</p>
         </p>
     </div>
     <!-- -->
@@ -115,25 +115,36 @@
 
                     <div class="hr-line-dashed"></div>
 
-                    <div id="privatekey">
-                        {% if context.settings.private_key_pem %}
+                    <div id="signing_privatekey">
+
+                        <h3>Signing</h3>
+
+                        {% if context.settings.signing_private_key_pem %}
                             <p>
-                            <pre>{{ context.settings.private_key_pem }}</pre>
+                            <pre>{{ context.settings.signing_private_key_pem }}</pre>
                             </p>
                         {% endif %}
-                        {% if context.settings.csr_pem %}
+                        {% if context.settings.signing_certificate %}
                             <p>
-                            <pre>{{ context.settings.csr_pem }}</pre>
+                            <pre>{{ context.settings.signing_certificate }}</pre>
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+
+                    <div id="transport_privatekey">
+
+                        <h3>Transport</h3>
+
+                        {% if context.settings.transport_private_key_pem %}
+                            <p>
+                            <pre>{{ context.settings.transport_private_key_pem }}</pre>
                             </p>
                         {% endif %}
                         {% if context.settings.transport_certificate %}
                             <p>
                             <pre>{{ context.settings.transport_certificate }}</pre>
-                            </p>
-                        {% endif %}
-                        {% if context.settings.transport_private_key %}
-                            <p>
-                            <pre>{{ context.settings.transport_private_key }}</pre>
                             </p>
                         {% endif %}
                     </div>

@@ -148,7 +148,7 @@ def make_token(kid: str, software_statement_id: str, client_scopes: str, token_u
     )
 
     token = jwt.JWT(header=header, claims=claims)
-    key_obj = jwk.JWK.from_pem(cache.get('private_key_pem').encode('latin-1'))
+    key_obj = jwk.JWK.from_pem(cache.get('signing_private_key_pem').encode('latin-1'))
     token.make_signed_token(key_obj)
     signed_token = token.serialize()
     return signed_token
@@ -173,10 +173,20 @@ def make_onboarding_token(kid: str, iss: str, aud: str, sub: str, scope: str, cl
     )
 
     token = jwt.JWT(header=header, claims=claims)
-    key_obj = jwk.JWK.from_pem(cache.get('private_key_pem').encode('latin-1'))
+    key_obj = jwk.JWK.from_pem(cache.get('signing_private_key_pem').encode('latin-1'))
     token.make_signed_token(key_obj)
     signed_token = token.serialize()
     return signed_token
+
+
+def create_csr(purpose, key_size):
+    private_key = make_private_key(key_size)
+    private_key_pem = make_private_key_pem(private_key).decode(encoding='utf-8')
+    cache.set(f"{purpose}_private_key_pem", private_key_pem, timeout=CACHE_TIMEOUT)
+
+    csr = make_csr(private_key)
+    csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode(encoding='utf-8')
+    cache.set(f"{purpose}_csr", csr_pem, timeout=CACHE_TIMEOUT)
 
 
 def get_context() -> dict:
@@ -206,11 +216,13 @@ def get_context() -> dict:
     context['csr_locality_name'] = cache.get('csr_locality_name')
 
     # Certs
-    context['private_key_pem'] = cache.get('private_key_pem')
-    context['kid'] = make_jwk_from_pem(context['private_key_pem']).get('kid')
-    context['csr_pem'] = cache.get('csr_pem')
+    context['signing_private_key_pem'] = cache.get('signing_private_key_pem')
+    context['kid'] = make_jwk_from_pem(context['signing_private_key_pem']).get('kid')
+    context['signing_csr'] = cache.get('signing_csr')
+    context['signing_certificate'] = cache.get('signing_certificate')
+    context['transport_private_key_pem'] = cache.get('transport_private_key_pem')
+    context['transport_csr'] = cache.get('transport_csr')
     context['transport_certificate'] = cache.get('transport_certificate')
-    context['transport_private_key'] = cache.get('transport_private_key')
 
     # Access token
     context['access_token'] = cache.get('access_token')
@@ -255,7 +267,8 @@ def root_handler() -> Response:
         cache.set('tpp_ssa_url', request.form.get('tpp_ssa_url'), timeout=CACHE_TIMEOUT)
         cache.set('aspsp_list_url', request.form.get('aspsp_list_url'), timeout=CACHE_TIMEOUT)
 
-        cache.set('private_key_pem', '', timeout=CACHE_TIMEOUT)
+        cache.set('signing_private_key_pem', '', timeout=CACHE_TIMEOUT)
+        cache.set('transport_private_key_pem', '', timeout=CACHE_TIMEOUT)
         cache.set('kid', secrets.token_hex(16), timeout=CACHE_TIMEOUT)
         cache.set('csr_pem', '', timeout=CACHE_TIMEOUT)
 
@@ -291,31 +304,36 @@ def createacsr_handler() -> Response:
         cache.set('csr_organizational_unit_name', request.form.get('tpp_id'), timeout=CACHE_TIMEOUT)
         cache.set('csr_common_name', request.form.get('software_statement_id'), timeout=CACHE_TIMEOUT)
 
-        private_key = make_private_key(int(request.form.get('key_size')))
-        private_key_pem = make_private_key_pem(private_key).decode(encoding='utf-8')
-        cache.set('private_key_pem', private_key_pem, timeout=CACHE_TIMEOUT)
-
-        csr = make_csr(private_key)
-        csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode(encoding='utf-8')
-        cache.set('csr_pem', csr_pem, timeout=CACHE_TIMEOUT)
+        key_size = int(request.form.get('key_size'))
+        create_csr('signing', key_size)
+        create_csr('transport', key_size)
 
         requests.post(
             os.path.join(DIRECTORY_ENDPOINT, 'client-csr'),
             data=dict(
                 client_id=cache.get('tpp_id'),
                 ssa_id=cache.get('software_statement_id'),
-                csr_pem=cache.get('csr_pem')
+                signing_csr=cache.get('signing_csr'),
+                transport_csr=cache.get('transport_csr')
             )
         )
 
-        r = requests.get(os.path.join(DIRECTORY_ENDPOINT, 'certificate/transport', cache.get('tpp_id')))
+        r = requests.get(
+            os.path.join(
+                DIRECTORY_ENDPOINT,
+                'organisation',
+                cache.get('type'),
+                cache.get('tpp_id'),
+                'certificates'
+            )
+        )
 
         if r.status_code == 200:
-            cache.set('transport_certificate', r.json().get('certificate'), timeout=CACHE_TIMEOUT)
-            cache.set('transport_private_key', r.json().get('private_key'), timeout=CACHE_TIMEOUT)
+            cache.set('signing_certificate', r.json().get('signing'), timeout=CACHE_TIMEOUT)
+            cache.set('transport_certificate', r.json().get('transport'), timeout=CACHE_TIMEOUT)
         else:
-            cache.set('transport_certificate', '', timeout=CACHE_TIMEOUT)
-            cache.set('transport_private_key', '', timeout=CACHE_TIMEOUT)
+            cache.set('signing_certificate', '', timeout=CACHE_TIMEOUT)
+            cache.set('transport_certificate', '' , timeout=CACHE_TIMEOUT)
 
     context = dict(settings=get_context())
 
