@@ -314,7 +314,9 @@ def createacsr_handler() -> Response:
                 client_id=cache.get('tpp_id'),
                 ssa_id=cache.get('software_statement_id'),
                 signing_csr=cache.get('signing_csr'),
-                transport_csr=cache.get('transport_csr')
+                signing_private_key=cache.get('signing_private_key_pem'),
+                transport_csr=cache.get('transport_csr'),
+                transport_private_key=cache.get('transport_private_key_pem')
             )
         )
 
