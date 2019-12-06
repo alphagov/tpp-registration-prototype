@@ -17,7 +17,7 @@ from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives import hashes
 
 from flask import abort
-from flask import Flask
+from flask import Flask, redirect
 from flask import request
 from flask import Response
 from flask import render_template
@@ -282,13 +282,12 @@ def root_handler() -> Response:
                 loa=cache.get('loa') if cache.get('type') == 'idp' else None
             )
         )
-
-    context = dict(settings=get_context())
-
-    try:
-        return render_template('home.html', context=context)
-    except TemplateNotFound:
-        abort(404)
+        return redirect('/createcsr', code=302)
+    else:
+        try:
+            return render_template('home.html', context=dict(settings=get_context()))
+        except TemplateNotFound:
+            abort(404)
 
 # create a csr handler
 @app.route('/createcsr/', endpoint='createacsr_handler', methods=['GET', 'POST'])
