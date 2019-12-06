@@ -194,6 +194,7 @@ def get_context() -> dict:
     context = dict()
 
     # Home /
+    context['scheme'] = cache.get('scheme')
     context['org_name'] = cache.get('org_name')
     context['tpp_id'] = cache.get('tpp_id')
     context['type'] = cache.get('type')
@@ -255,6 +256,7 @@ def root_handler() -> Response:
 
     if request.method == 'POST':
 
+        cache.set('scheme', request.form.get('scheme'), timeout=CACHE_TIMEOUT)
         cache.set('org_name', request.form.get('org_name'), timeout=CACHE_TIMEOUT)
         cache.set('tpp_id', request.form.get('tpp_id'), timeout=CACHE_TIMEOUT)
         cache.set('type', request.form.get('type'), timeout=CACHE_TIMEOUT) # Broker, IDP etc
@@ -275,6 +277,7 @@ def root_handler() -> Response:
         requests.post(
             os.path.join(DIRECTORY_ENDPOINT, 'organisation', cache.get('type')),
             data=dict(
+                scheme=cache.get('scheme'),
                 organisation_name=cache.get('org_name'),
                 client_id=cache.get('tpp_id'),
                 domain=cache.get('domain'),

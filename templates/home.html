@@ -2,11 +2,34 @@
 {% block home %}
     <h2 class="govuk-heading-l">Organisation Onboarding</h2>
     <p class="govuk-body">The Organisation Onboarding Application is meant to help onboard organisation apps to the Trust Framework.</p>
+
+    <p class="govuk-body">An organisation can onboard with one of available schemes.</p>
+
     <p class="govuk-body">An organisation can be a Broker or an IDP.</p>
 
     <form action="/" method="post">
         <div class="govuk-form-group">
             <fieldset class="govuk-fieldset">
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="scheme">Choose scheme</label>
+                    <div class="govuk-radios govuk-radios--inline">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="scheme-1" name="scheme" type="radio" value="1"
+                            {% if context.settings.scheme == '1' %}checked="checked"{%endif%}>
+                            <label class="govuk-label govuk-radios__label" for="scheme-1">
+                                Scheme 1
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="scheme-2" name="scheme" type="radio" value="2"
+                            {% if context.settings.scheme == '2' %}checked="checked"{%endif%}>
+                            <label class="govuk-label govuk-radios__label" for="scheme-2">
+                                Scheme 2
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="org_name">Organisation Name</label>
                     <input class="govuk-input" id="org_name" name="org_name" type="text" placeholder="e.g. Super Cool Org"{% if context.settings.org_name %}value="{{ context.settings.org_name }}"{% endif %}>
