@@ -1,155 +1,93 @@
 {% extends 'base.html' %}
 {% block home %}
-    <div class="jumbotron">
-        <h1>Organisation Onboarding Application</h1>
-        <p>The Organisation Onboarding Application is meant to help onboard organisation apps to the Trust Framework.</p>
-        <p>An organisation can be a Broker or an IDP.</p>
-    </div>
-    <!-- -->
-    <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Settings
-                    <small>Essential settings.
-                    </small>
-                </h5>
-            </div>
+    <h2 class="govuk-heading-l">Organisation Onboarding</h2>
+    <p class="govuk-body">The Organisation Onboarding Application is meant to help onboard organisation apps to the Trust Framework.</p>
+    <p class="govuk-body">An organisation can be a Broker or an IDP.</p>
 
-            <div class="ibox-content">
-                <form class="form-horizontal" method="post" action="/">
+    <form action="/" method="post">
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="org_name">Organisation Name</label>
+                    <input class="govuk-input" id="org_name" name="org_name" type="text" placeholder="e.g. Super Cool Org"{% if context.settings.org_name %}value="{{ context.settings.org_name }}"{% endif %}>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Organisation Name</strong></span><br/>
-                            <input type="text" name="org_name" for="org_name" id="org_name"
-                                   placeholder="e.g. Super Cool Org"
-                                   {% if context.settings.org_name %}value="{{ context.settings.org_name }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Organisation ID</strong></span><br/>
-                            <input type="text" name="tpp_id" for="tpp_id" id="tpp_id"
-                                   placeholder="e.g. COOLTPP01"
-                                   {% if context.settings.tpp_id %}value="{{ context.settings.tpp_id }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Organisation Domain</strong></span><br/>
-                            <input type="text" name="domain" for="domain" id="domain"
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="tpp_id">Organisation ID</label>
+                    <input class="govuk-input" type="text" name="tpp_id" for="tpp_id" id="tpp_id"
+                                    placeholder="e.g. COOLTPP01"
+                                    {% if context.settings.tpp_id %}value="{{ context.settings.tpp_id }}"{% endif %}>
+                </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="domain">Organisation Domain</label>
+                    <input class="govuk-input" type="text" name="domain" for="domain" id="domain"
                                    placeholder="e.g. https://www.example.com"
-                                   {% if context.settings.domain %}value="{{ context.settings.domain }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
+                                   {% if context.settings.domain %}value="{{ context.settings.domain }}"{% endif %}>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                            class="help-block m-b-none"><strong>Organisation Type</strong></span><br/>
-                                <select name="type">
-                                    <option value="broker"
-                                        {% if context.settings.type == 'broker' %} selected {% endif %}>
-                                        Broker
-                                    </option>
-                                    <option value="idp"
-                                        {% if context.settings.type == 'idp' %} selected {% endif %}>
-                                        IDP
-                                    </option>
-                                </select>
-                        </div>
-                    </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="type">Organisation Type</label>
+                    <select class="govuk-select" id="type" name="type">
+                        <option value="broker"
+                            {% if context.settings.type == 'broker' %} selected {% endif %}>
+                            Broker
+                        </option>
+                        <option value="idp"
+                            {% if context.settings.type == 'idp' %} selected {% endif %}>
+                            IDP
+                        </option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                            class="help-block m-b-none"><strong>Level of Assurance</strong></span>
-                            <span class="help-block m-b-none">
-                                Only applicable for IDP organisation type
-                            </span><br/>
-                            <select name="loa">
-                                <option value="1">LOA 1</option>
-                                <option value="2">LOA 2</option>
-                                <option value="3">LOA 3</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="loa">Level of Assurance</label>
+                    <select class="govuk-select" id="loa" name="loa">
+                        <option value="1">LOA 1</option>
+                        <option value="2">LOA 2</option>
+                        <option value="3">LOA 3</option>
+                    </select>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Software Statement ID</strong></span><br/>
-                            <input type="text" name="software_statement_id" for="software_statement_id"
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="software_statement_id">Software Statement ID</label>
+                    <input class="govuk-input" type="text" name="software_statement_id"                                  for="software_statement_id"
                                    id="software_statement_id"
                                    placeholder="e.g. 156fe39a-3cef-4056-b89c-76b71ec7d41c"
-                                   {% if context.settings.software_statement_id %}value="{{ context.settings.software_statement_id }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
+                                   {% if context.settings.software_statement_id %}value="{{ context.settings.software_statement_id }}"{% endif %}>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Organisation Scopes</strong></span><br/>
-                            <input type="text" name="client_scopes" for="client_scopes" id="client_scopes"
-                                   placeholder="e.g. ASPSPReadAccess TPPReadAccess"
-                                   {% if context.settings.client_scopes %}value="{{ context.settings.client_scopes }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Token URL</strong></span><br/>
-                            <input type="text" name="token_url" for="token_url" id="token_url"
+                <div class="govuk-form-group" style="display: none;">
+                    <label class="govuk-label" for="token_url">Token URL</label>
+                    <input class="govuk-input" type="text" name="token_url" for="token_url" id="token_url"
                                    placeholder="e.g. https://www.example.com/token"
-                                   {% if context.settings.token_url %}value="{{ context.settings.token_url }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
+                                   {% if context.settings.token_url %}value="{{ context.settings.token_url }}"{% endif %}>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>SSA Retrieval URL</strong></span><br/>
-                            <input type="text" name="tpp_ssa_url" for="tpp_ssa_url" id="tpp_ssa_url"
+                <div class="govuk-form-group" style="display: none;">
+                    <label class="govuk-label" for="tpp_ssa_url">Software Statement URL</label>
+                    <input class="govuk-input" type="text" name="tpp_ssa_url" for="tpp_ssa_url"                          id="tpp_ssa_url"
                                    placeholder="e.g. https://www.example.com/ssa"
-                                   {% if context.settings.tpp_ssa_url %}value="{{ context.settings.tpp_ssa_url }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
+                                   {% if context.settings.tpp_ssa_url %}value="{{ context.settings.tpp_ssa_url }}"{% endif %}>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>Authorisation Servers URL</strong></span><br/>
-                            <input type="text" name="aspsp_list_url" for="aspsp_list_url" id="aspsp_list_url"
+                <div class="govuk-form-group" style="display: none;">
+                    <label class="govuk-label" for="aspsp_list_url">Authorisation Server URLs</label>
+                    <input class="govuk-input" type="text" name="aspsp_list_url" for="aspsp_list_url"                    id="aspsp_list_url"
                                    placeholder="e.g. https://www.example.com/aspsp"
-                                   {% if context.settings.aspsp_list_url %}value="{{ context.settings.aspsp_list_url }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
+                                   {% if context.settings.aspsp_list_url %}value="{{ context.settings.aspsp_list_url }}"{% endif %}>
+                </div>
 
-                <div class="form-group">
-                        <div class="col-lg-10"><br/><span
-                                class="help-block m-b-none"><strong>App Onboarding Scopes</strong></span><br/>
-                            <input type="text" name="onboarding_scopes" for="onboarding_scopes" id="onboarding_scopes"
-                                   placeholder="e.g. openid makepayment"
-                                   {% if context.settings.onboarding_scopes %}value="{{ context.settings.onboarding_scopes }}"{% endif %}
-                                   class="form-control">
-                        </div>
-                    </div>
+                <div class="govuk-form-group" style="display: none;">
+                    <label class="govuk-label" for="client_scopes">Organisation Scopes</label>
+                    <input class="govuk-input" type="text" name="client_scopes" for="client_scopes"                    id="client_scopes" value="ASPSPReadAccess">
+                </div>
 
-                    <div class="hr-line-dashed"></div>
-
-                    <div class="form-group">
-                        <div class="col-sm-4">
-                            <button class="btn btn-primary" type="submit">Update Settings</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
+                <div class="govuk-form-group" style="display: none;">
+                    <label class="govuk-label" for="onboarding_scopes">App Onboarding Scopes</label>
+                    <input class="govuk-input" type="text" name="onboarding_scopes"                                     for="onboarding_scopes" id="onboarding_scopes" value="openid">
+                </div>
+            </fieldset>
         </div>
-    </div>
-    <!-- -->
+        <input type="submit" size="25" class="govuk-button" value="Register Organisation">
+    </form>
 {% endblock %}
