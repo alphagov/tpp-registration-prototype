@@ -518,6 +518,13 @@ def onboardapp_handler() -> Response:
     except TemplateNotFound:
         abort(404)
 
+
+@app.route('/reset/', endpoint='reset_handler', methods=['GET'])
+def reset_handler() -> Response:
+    cache.clear()
+    return redirect('/', code=302)
+
+
 ################################################################################
 # End
 ################################################################################

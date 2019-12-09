@@ -10,6 +10,7 @@
                 <textarea readonly="readonly" class="govuk-textarea" id="ssa" name="ssa" rows="35" aria-describedby="ssa"
                 value="" style="font-size: 13px;">{{ context.settings.software_statement_assertion }}</textarea>
             </div>
+            <a href="/reset" class="govuk-button">Add another organisation</a>
         </div>
     {% else %}
         <form action="/getssa/" method="post">
