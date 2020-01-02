@@ -8,4 +8,11 @@ else
   source ./venv/bin/activate 2>/dev/null && echo "Virtual environment activated."
 fi
 
-python3 application.py
+PID_DIR=./tmp/pids
+if [ ! -d $PID_DIR ]; then
+    echo -e 'Creating PIDs directory\n'
+    mkdir -p $PID_DIR
+fi
+
+nohup python3 application.py  &
+  echo $! > ./tmp/pids/registration.pid
