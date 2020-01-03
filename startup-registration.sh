@@ -14,5 +14,7 @@ if [ ! -d $PID_DIR ]; then
     mkdir -p $PID_DIR
 fi
 
+pip3 install -r requirements.txt
+
 nohup python3 application.py  &
   echo $! > ./tmp/pids/registration.pid
