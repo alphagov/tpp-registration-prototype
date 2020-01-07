@@ -1,59 +1,17 @@
 # tpp-onboarding-application
-Downloadable tool which allows creation of an SSA and onboarding with ASPSPs
+The Third Party Provider(tpp) onboarding application acts as a downloadable tool which allows creation of an Software Statement Assertions(SSA) and onboarding with Brokers. It acts as a Frontend to the [Directory](https://github.com/alphagov/trust-framework-directory-prototype) which Brokers can use to register onto the Directory.
 
-## Prerequisites
+## Running the Onboarding Application
 
-Docker containers wrap up a piece of software in a complete filesystem that contains everything 
-it needs to run: code, runtime, system tools, system libraries etc.
-This guarantees that it will always run the same, regardless of the environment it is running in. 
-https://www.docker.com/what-docker
+### Prerequisites
+* Python3
 
-All of the commands for interacting with the project should be issued within
-the `docker-compose` environment.
+### Starting the app
+The Onboarding/Registration application can be started independently by running the `startup-registration.sh` or together with the rest of the Trust Framework Prototype applications using the [start-all-services.sh](https://github.com/alphagov/stub-oidc-broker/blob/master/start-all-services.sh) in the Stub OIDC Broker repository.
 
-## Installation
+When running locally the registration page can be accessed using http://localhost:5000.
 
-To clone the repository, issue the following command:
-
-```bash
-git clone https://github.com/OpenBankingUK/tpp-onboarding-application
-```
-
-To build for testing in a local environment, change to the directory that you
-cloned the repository to and issue the following `docker-compose` command:
-
-```bash
-docker-compose -f local.yml build
-```
-
-This will fetch the all of the dependencies for the project.
-
-## Usage
-
-All of the commands for interacting with the project should be issued within
-the `docker-compose` environment.
-
-To start a local instance of the server, issue the following command:
-
-```bash
-docker-compose -f local.yml up
-```
-
-The server will be available at [http://localhost](http://localhost/).
-
-## Environment Variables
-
-This section documents the environment variables that can be used to configure
-an instance.
-
-|Variable                 |Default                      |
-|-------------------------|-----------------------------|
-|`CACHE_TIMEOUT`          |3600                         |
-|`TEMPLATES_FOLDER `      |"templates "                 |                     
-|`TEST_API_ENDPOINT`      |"/accounts"                  |
-|`FLASK_DEBUG      `      |True                         |
-|`SECRET_KEY`             | hex(16)                     |
-
-## Copyright
-
-See COPYRIGHT.
+### TPP Onboarding Application runs on the PAAS
+* To deploy TPP Onboarding Application simply login to the PAAS and select the build-learn space. 
+* Run `cf push` and this will deploy the app.
+* The application on the PAAS can be accessed using https://onboarding-prototype.cloudapps.digital/.
