@@ -14,6 +14,11 @@ if [ ! -d $PID_DIR ]; then
     mkdir -p $PID_DIR
 fi
 
+if [ -f "./tmp/pids/registration.pid" ]; then
+  echo -e "About to kill registration before starting again"
+  $(pwd)/kill-registration.sh
+fi
+
 pip3 install -r requirements.txt
 
 nohup python3 application.py  &

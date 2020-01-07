@@ -1,5 +1,5 @@
 # tpp-onboarding-application
-The Third Party Provider(tpp) onboarding application acts as a downloadable tool which allows creation of an Software Statement Assertions(SSA) and onboarding with Brokers. It acts as a Frontend to the [Directory](https://github.com/alphagov/trust-framework-directory-prototype) which Brokers can use to register onto the Directory.
+The Third Party Provider(tpp) onboarding application allows creation of an Software Statement Assertions(SSA) and onboarding with Brokers. It acts as a Frontend to the [Directory](https://github.com/alphagov/trust-framework-directory-prototype) which Brokers can use to register onto the Directory.
 
 ## Running the Onboarding Application
 
