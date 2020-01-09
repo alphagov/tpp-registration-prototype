@@ -7,6 +7,7 @@ import os
 import uuid
 import time
 import secrets
+import base64
 
 import cryptography
 from cryptography.hazmat.backends import default_backend
@@ -188,6 +189,11 @@ def create_csr(purpose, key_size):
     csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode(encoding='utf-8')
     cache.set(f"{purpose}_csr", csr_pem, timeout=CACHE_TIMEOUT)
 
+def base64_encode_image(brand_image_location) -> bytes:
+    
+    with open(brand_image_location, "rb") as image:
+        b64string = base64.b64encode(image.read())
+        return b64string    
 
 def get_context() -> dict:
 
@@ -255,6 +261,14 @@ def root_handler() -> Response:
     """
 
     if request.method == 'POST':
+        
+        if request.form.get('type') == 'broker':
+            f = request.files['brand_image']
+            sfname = 'static/img/'+str(f.filename)
+            f.save(sfname)
+            base64_image = base64_encode_image(sfname)
+            os.remove(sfname)
+            cache.set('base64_image', base64_image)
 
         cache.set('scheme', request.form.get('scheme'), timeout=CACHE_TIMEOUT)
         cache.set('org_name', request.form.get('org_name'), timeout=CACHE_TIMEOUT)
@@ -269,10 +283,12 @@ def root_handler() -> Response:
         cache.set('tpp_ssa_url', request.form.get('tpp_ssa_url'), timeout=CACHE_TIMEOUT)
         cache.set('aspsp_list_url', request.form.get('aspsp_list_url'), timeout=CACHE_TIMEOUT)
 
+        cache.set('csr_pem', '', timeout=CACHE_TIMEOUT)
         cache.set('signing_private_key_pem', '', timeout=CACHE_TIMEOUT)
         cache.set('transport_private_key_pem', '', timeout=CACHE_TIMEOUT)
         cache.set('kid', secrets.token_hex(16), timeout=CACHE_TIMEOUT)
-        cache.set('csr_pem', '', timeout=CACHE_TIMEOUT)
+
+
 
         requests.post(
             os.path.join(DIRECTORY_ENDPOINT, 'organisation', cache.get('type')),
@@ -282,6 +298,7 @@ def root_handler() -> Response:
                 client_id=cache.get('tpp_id'),
                 domain=cache.get('domain'),
                 csr_pem=cache.get('csr_pem'),
+                brand_image=cache.get('base64_image') if cache.get('type') == 'broker' else None,
                 loa=cache.get('loa') if cache.get('type') == 'idp' else None
             )
         )

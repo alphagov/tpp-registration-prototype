@@ -7,7 +7,7 @@
 
     <p class="govuk-body">An organisation can be a Broker or an IDP.</p>
 
-    <form action="/" method="post">
+    <form action="/" method="post" enctype="multipart/form-data">
         <div class="govuk-form-group">
             <fieldset class="govuk-fieldset">
                 <div class="govuk-form-group">
@@ -32,18 +32,18 @@
 
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="org_name">Organisation Name</label>
-                    <input class="govuk-input" id="org_name" name="org_name" type="text" placeholder="e.g. Super Cool Org"{% if context.settings.org_name %}value="{{ context.settings.org_name }}"{% endif %}>
+                    <input class="govuk-input" id="org_name" name="org_name" required type="text" placeholder="e.g. Super Cool Org"{% if context.settings.org_name %}value="{{ context.settings.org_name }}"{% endif %}>
                 </div>
 
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="tpp_id">Organisation ID</label>
-                    <input class="govuk-input" type="text" name="tpp_id" for="tpp_id" id="tpp_id"
+                    <input class="govuk-input" type="text" name="tpp_id" required for="tpp_id" id="tpp_id"
                                     placeholder="e.g. COOLTPP01"
                                     {% if context.settings.tpp_id %}value="{{ context.settings.tpp_id }}"{% endif %}>
                 </div>
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="domain">Organisation Domain</label>
-                    <input class="govuk-input" type="text" name="domain" for="domain" id="domain"
+                    <input class="govuk-input" type="text" name="domain" required for="domain" id="domain"
                                    placeholder="e.g. https://www.example.com"
                                    {% if context.settings.domain %}value="{{ context.settings.domain }}"{% endif %}>
                 </div>
@@ -73,10 +73,15 @@
 
                 <div class="govuk-form-group">
                     <label class="govuk-label" for="software_statement_id">Software Statement ID</label>
-                    <input class="govuk-input" type="text" name="software_statement_id"                                  for="software_statement_id"
+                    <input class="govuk-input" type="text" name="software_statement_id" required for="software_statement_id"
                                    id="software_statement_id"
                                    placeholder="e.g. 156fe39a-3cef-4056-b89c-76b71ec7d41c"
                                    {% if context.settings.software_statement_id %}value="{{ context.settings.software_statement_id }}"{% endif %}>
+                </div>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="software_statement_id">Upload Broker image in SVG format</label>
+                    <input class="govuk-input" type="file" name="brand_image" id="brand_image_id" accept="image/*">
                 </div>
 
                 <div class="govuk-form-group" style="display: none;">
