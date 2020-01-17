@@ -59,6 +59,10 @@
                             {% if context.settings.type == 'idp' %} selected {% endif %}>
                             IDP
                         </option>
+                        <option value="rp"
+                            {% if context.settings.type == 'rp' %} selected {% endif %}>
+                            RP
+                        </option>
                     </select>
                 </div>
 
